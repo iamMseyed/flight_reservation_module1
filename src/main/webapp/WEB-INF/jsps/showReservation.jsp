@@ -62,7 +62,7 @@
             <input type="hidden" name="flightId" value="${flight.id}"/>
             <label>Enter Card Details</label>
             <label>Card Number<input type="text" name="cardNumber"/></label>
-            <label>Name of the Card <input type="text" name="cardHolderName"/></label>
+            <label>Name on the Card <input type="text" name="cardHolderName"/></label>
             <label>CVV <input type="number" name="cvv"/> </label>
             <label>Expiry Date <input type="date" name="expiryDate"></label>
             <input type="submit" value="Complete Reservation"/>

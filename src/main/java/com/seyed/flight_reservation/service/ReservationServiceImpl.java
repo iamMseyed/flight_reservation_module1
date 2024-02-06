@@ -7,8 +7,10 @@ import com.seyed.flight_reservation.entity.Reservation;
 import com.seyed.flight_reservation.repository.FlightRepository;
 import com.seyed.flight_reservation.repository.PassengerRepository;
 import com.seyed.flight_reservation.repository.ReservationRepository;
+import com.seyed.flight_reservation.utilities.PdfGenerator;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +32,7 @@ public class ReservationServiceImpl implements ReservationService{
     public Reservation bookFlight(ReservationRequest reservationRequest) {
         //inject passenger, flight and these both into reservation table
 
+        String filePath ="E:\\Programming Codes\\NareshIT_P_N\\JAVA\\Code\\SpringBoot\\flight_reservation\\src\\main\\java\\com\\seyed\\flight_reservation\\tickets\\booking";
         Passenger passenger = new Passenger();
         passenger.setFirstName(reservationRequest.getFirstName());
         passenger.setLastName(reservationRequest.getLastName());
@@ -40,8 +43,7 @@ public class ReservationServiceImpl implements ReservationService{
 
         Long flightId= reservationRequest.getFlightId();
         Optional<Flight> findById = flightRepository.findById(flightId);
-        Flight flight = findById.get(); //we already have saved flight data onto db, but we need to store flight data and passenger data to reservation table
-
+        Flight flight=findById.get(); //we already have saved flight data onto db, but we need to store flight data and passenger data to reservation table
         Reservation reservation = new Reservation();
         reservation.setFlight(flight);
         reservation.setPassenger(passenger);
@@ -51,6 +53,10 @@ public class ReservationServiceImpl implements ReservationService{
         reservation.setUniqueNumber(uuid.substring(0, Math.min(10, uuid.length()))); // unique id of length 10;
 
         reservationRepository.save(reservation);
+
+        PdfGenerator pdfGenerator = new PdfGenerator();
+        pdfGenerator.generatePdf(filePath+"_"+passenger.getFirstName()+".pdf",reservationRequest.getFirstName(),reservationRequest.getEmail(),reservationRequest.getPhone(),
+                flight.getOperatingAirlines(),flight.getDateOfDeparture(),flight.getDepartureCity(),flight.getArrivalCity());
 
         return reservation; //is service layer, will return to controller layer
     }

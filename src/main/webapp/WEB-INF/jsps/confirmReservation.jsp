@@ -12,8 +12,8 @@
 
 </head>
 <body>
-<div style="text-align: center">
-   Your Ticket is booked. Your reservation id is ${reservationId}
+<div style="text-align: center;margin: 5em;">
+   Ticket is booked successfully!. Your reservation id is ${reservationId}
 </div>
 </body>
 </html>
