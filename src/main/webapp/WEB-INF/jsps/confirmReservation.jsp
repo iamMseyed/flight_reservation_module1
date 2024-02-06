@@ -1,6 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page language="java" contentType="text/html; ISO-8859-1" pageEncoding="ISO-8859-1" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,7 @@
 </head>
 <body>
 <div style="text-align: center;margin: 5em;">
-   Ticket is booked successfully!. Your reservation id is ${reservationId}
+   Ticket booked successfully! Your reservation id is ${reservationId}
 </div>
 </body>
 </html>

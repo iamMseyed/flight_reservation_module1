@@ -35,7 +35,8 @@ public class PdfGenerator {
         Paragraph preface = new Paragraph();
 
         preface.add(new Paragraph("Flight Booking Details", catFont));
-        preface.add(new Paragraph("Ticket generated on - "+new Date(), smallBold));
+        preface.add(new Paragraph("Ticket generated at - "+new Date(), smallBold));
+        preface.setAlignment(Element.ALIGN_CENTER);
 
         document.add(preface);
         document.add(Chunk.NEWLINE);
@@ -44,7 +45,7 @@ public class PdfGenerator {
         PdfPTable table = new PdfPTable(2);
         table.setWidthPercentage(100);
 
-        PdfPCell c1 = new PdfPCell(new Phrase("Passenger Detail"));
+        PdfPCell c1 = new PdfPCell(new Phrase("Passenger Details",smallBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         c1.setColspan(2);
         table.addCell(c1);
@@ -57,15 +58,14 @@ public class PdfGenerator {
         table.addCell(String.valueOf(phone));
 
         document.add(table);
+        document.add(Chunk.NEWLINE);
 
         PdfPTable table1= new PdfPTable(2);
         table1.setWidthPercentage(100);
-
-
-        PdfPCell c2 = new PdfPCell(new Phrase("Flight Detail"));
+        PdfPCell c2 = new PdfPCell(new Phrase("Flight Details",smallBold));
         c2.setHorizontalAlignment(Element.ALIGN_CENTER);
         c2.setColspan(2);
-        table.addCell(c2);
+        table1.addCell(c2);
 
         table1.addCell("Operating Airlines");
         table1.addCell(operatingAirlines);
