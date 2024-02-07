@@ -18,26 +18,18 @@ public class ReservationServiceImpl implements ReservationService{
 
     private final PassengerRepository passengerRepository;
     private final FlightRepository flightRepository;
-
     private final ReservationRepository reservationRepository;
-    public ReservationServiceImpl(PassengerRepository passengerRepository, FlightRepository flightRepository,ReservationRepository reservationRepository) {
+    private final PdfGenerator pdfGenerator;
+    public ReservationServiceImpl(PassengerRepository passengerRepository, FlightRepository flightRepository,ReservationRepository reservationRepository, PdfGenerator pdfGenerator) {
         this.passengerRepository = passengerRepository;
         this.flightRepository = flightRepository;
         this.reservationRepository = reservationRepository;
+        this.pdfGenerator = pdfGenerator;
     }
 
     @Override
     public Reservation bookFlight(ReservationRequest reservationRequest) {
         //inject passenger, flight and these both into reservation table
-
-        String filePath ="E:\\Programming Codes\\NareshIT_P_N\\JAVA\\Code\\SpringBoot\\flight_reservation\\src\\main\\java\\com\\seyed\\flight_reservation\\tickets\\booking";
-        Passenger passenger = new Passenger();
-        passenger.setFirstName(reservationRequest.getFirstName());
-        passenger.setLastName(reservationRequest.getLastName());
-        passenger.setMiddleName(reservationRequest.getMiddleName());
-        passenger.setEmail(reservationRequest.getEmail());
-        passenger.setPhone(reservationRequest.getPhone());
-        passengerRepository.save(passenger); //passenger data saved
 
         Long flightId= reservationRequest.getFlightId();
         Optional<Flight> findById = flightRepository.findById(flightId);
@@ -48,19 +40,33 @@ public class ReservationServiceImpl implements ReservationService{
             flight = findById.get();
         else
             throw new RuntimeException("Flight not found");
+
+        Passenger passenger = new Passenger();
+        passenger.setFirstName(reservationRequest.getFirstName());
+        passenger.setLastName(reservationRequest.getLastName());
+        passenger.setMiddleName(reservationRequest.getMiddleName());
+        passenger.setEmail(reservationRequest.getEmail());
+        passenger.setPhone(reservationRequest.getPhone());
+        passengerRepository.save(passenger); //passenger data saved
+
         Reservation reservation = new Reservation();
         reservation.setFlight(flight);
         reservation.setPassenger(passenger);
         reservation.setCheckedIn(false); //still false, after that we can use true
         reservation.setNumberOfBags(0);
-        String uuid = UUID.randomUUID().toString().replaceAll("-", ""); //to generate unique id when ticket booked
-        reservation.setUniqueNumber(uuid.substring(0, Math.min(10, uuid.length()))); // unique id of length 10;
+        //to generate unique id when ticket booked
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        uuid = uuid.substring(0, Math.min(10, uuid.length())); // unique id of length 10;
+        reservation.setUniqueNumber(uuid);
 
+        String fN = passenger.getFirstName();
         reservationRepository.save(reservation);
 
-        PdfGenerator pdfGenerator = new PdfGenerator();
-        pdfGenerator.generatePdf(filePath+"_"+passenger.getFirstName()+".pdf",reservationRequest.getFirstName(),reservationRequest.getEmail(),reservationRequest.getPhone(),
-                flight.getOperatingAirlines(),flight.getDateOfDeparture(),flight.getDepartureCity(),flight.getArrivalCity());
+        String file= "src/main/java/com/seyed/flight_reservation/tickets/booking_" + fN +"_"+uuid+".pdf";
+
+
+        pdfGenerator.generateItinerary(reservation,file);
+//      emailUtil.sendItinerary(reservation.getPassenger().getEmail(), FILE_PATH);
 
         return reservation; //is service layer, will return to controller layer
     }

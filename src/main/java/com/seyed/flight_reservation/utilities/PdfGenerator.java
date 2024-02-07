@@ -1,37 +1,40 @@
 package com.seyed.flight_reservation.utilities;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.seyed.flight_reservation.entity.Reservation;
 import org.springframework.stereotype.Component;
 import java.io.FileOutputStream;
-import java.time.LocalDate;
 import java.util.Date;
 
 
 @Component //to generate bean of this during runtime
 public class PdfGenerator {
-    private static final Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
+    private static final Font catFont = new Font(Font.FontFamily.HELVETICA, 18,
         Font.BOLD);
-    private static final Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+    private static final Font smallBold = new Font(Font.FontFamily.HELVETICA, 12,
             Font.BOLD);
 
-    public void generatePdf(String filePath, String name, String emailId, Long phone, String operatingAirlines, LocalDate departureDate, String departureCity, String arrivalCity) {
+    private static final Font thankYou = new Font(Font.FontFamily.TIMES_ROMAN, 10,
+            Font.ITALIC);
+
+    public void generateItinerary(Reservation reservation, String filePath) {
+        Document document = new Document();
         try {
-            Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
 
-            document.open();
-            addTitleAndTable(document,name, emailId,phone,operatingAirlines,departureDate,departureCity,arrivalCity);
-
+            document.open(); //open the document
+             generateTable(reservation,document); //call generateTable and returns table
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
-    private static void addTitleAndTable(
-            Document document, String name, String emailId, Long phone, String operatingAirlines, LocalDate departureDate, String departureCity, String arrivalCity
-    )throws DocumentException {
+    private static PdfPTable generateTable(Reservation reservation, Document document) throws DocumentException {
         Paragraph preface = new Paragraph();
 
         preface.add(new Paragraph("Flight Booking Details", catFont));
@@ -42,6 +45,18 @@ public class PdfGenerator {
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
 
+        PdfPTable table = putPassengerDetails(reservation); //add passenger details
+        document.add(table);
+
+        document.add(Chunk.NEWLINE);
+
+        PdfPTable table1 = putFlightDetails(reservation); //add flight details
+        document.add(table1);
+
+       return table;
+    }
+
+    private static PdfPTable putPassengerDetails(Reservation reservation) {
         PdfPTable table = new PdfPTable(2);
         table.setWidthPercentage(100);
 
@@ -51,15 +66,15 @@ public class PdfGenerator {
         table.addCell(c1);
 
         table.addCell("Passenger name");
-        table.addCell(name);
+        table.addCell(reservation.getPassenger().getFirstName()+" "+ reservation.getPassenger().getMiddleName()+" "+ reservation.getPassenger().getLastName());
         table.addCell("Email Id");
-        table.addCell(emailId);
+        table.addCell(reservation.getPassenger().getEmail());
         table.addCell("Phone Number");
-        table.addCell(String.valueOf(phone));
+        table.addCell(String.valueOf(reservation.getPassenger().getPhone()));
+        return table;
+    }
 
-        document.add(table);
-        document.add(Chunk.NEWLINE);
-
+    private static PdfPTable putFlightDetails(Reservation reservation) {
         PdfPTable table1= new PdfPTable(2);
         table1.setWidthPercentage(100);
         PdfPCell c2 = new PdfPCell(new Phrase("Flight Details",smallBold));
@@ -68,16 +83,15 @@ public class PdfGenerator {
         table1.addCell(c2);
 
         table1.addCell("Operating Airlines");
-        table1.addCell(operatingAirlines);
-        table1.addCell("Departure City");
-        table1.addCell(departureCity);
+        table1.addCell(reservation.getFlight().getOperatingAirlines());
         table1.addCell("Departure Date");
-        table1.addCell(String.valueOf(departureDate));
+        table1.addCell(String.valueOf(reservation.getFlight().getDateOfDeparture()));
+        table1.addCell("Departure City");
+        table1.addCell(reservation.getFlight().getDepartureCity());
         table1.addCell("Arrival City");
-        table1.addCell(arrivalCity);
+        table1.addCell(reservation.getFlight().getArrivalCity());
 
-        document.add(table1);
 
-        document.close();
+        return table1;
     }
 }
