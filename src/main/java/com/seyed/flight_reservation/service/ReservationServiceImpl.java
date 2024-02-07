@@ -9,8 +9,6 @@ import com.seyed.flight_reservation.repository.PassengerRepository;
 import com.seyed.flight_reservation.repository.ReservationRepository;
 import com.seyed.flight_reservation.utilities.PdfGenerator;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,7 +41,13 @@ public class ReservationServiceImpl implements ReservationService{
 
         Long flightId= reservationRequest.getFlightId();
         Optional<Flight> findById = flightRepository.findById(flightId);
-        Flight flight=findById.get(); //we already have saved flight data onto db, but we need to store flight data and passenger data to reservation table
+        //we already have saved flight data onto db, but we need to store flight data and passenger data to reservation table
+        //Flight flight=findById.get();
+        Flight flight;
+        if (findById.isPresent())
+            flight = findById.get();
+        else
+            throw new RuntimeException("Flight not found");
         Reservation reservation = new Reservation();
         reservation.setFlight(flight);
         reservation.setPassenger(passenger);

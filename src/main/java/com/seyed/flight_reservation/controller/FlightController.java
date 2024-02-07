@@ -36,7 +36,11 @@ public class FlightController {
     @RequestMapping("/showCompleteReservation")
     public String showCompleteReservation(@RequestParam("flightId") Long flightId, ModelMap modelMap) {
         Optional<Flight> findById=flightRepository.findById(flightId);
-        Flight flight=findById.get();
+        Flight flight;
+        if (findById.isPresent()) {
+            flight = findById.get();
+        }else
+            throw new RuntimeException("Flight not found");
         modelMap.addAttribute("flight",flight);//pass to jsp file
         return "showReservation";
     }
