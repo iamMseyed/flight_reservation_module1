@@ -139,7 +139,13 @@
             <artifactId>hyph</artifactId>
             <version>7.0.2</version>
         </dependency>
+<!--        End of pdf, excel related-->
 
+<!--        For sending emails-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

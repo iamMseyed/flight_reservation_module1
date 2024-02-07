@@ -7,6 +7,7 @@ import com.seyed.flight_reservation.entity.Reservation;
 import com.seyed.flight_reservation.repository.FlightRepository;
 import com.seyed.flight_reservation.repository.PassengerRepository;
 import com.seyed.flight_reservation.repository.ReservationRepository;
+import com.seyed.flight_reservation.utilities.EmailSending;
 import com.seyed.flight_reservation.utilities.PdfGenerator;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -20,11 +21,13 @@ public class ReservationServiceImpl implements ReservationService{
     private final FlightRepository flightRepository;
     private final ReservationRepository reservationRepository;
     private final PdfGenerator pdfGenerator;
-    public ReservationServiceImpl(PassengerRepository passengerRepository, FlightRepository flightRepository,ReservationRepository reservationRepository, PdfGenerator pdfGenerator) {
+    private final EmailSending emailSending;
+    public ReservationServiceImpl(PassengerRepository passengerRepository, FlightRepository flightRepository, ReservationRepository reservationRepository, PdfGenerator pdfGenerator, EmailSending emailSending) {
         this.passengerRepository = passengerRepository;
         this.flightRepository = flightRepository;
         this.reservationRepository = reservationRepository;
         this.pdfGenerator = pdfGenerator;
+        this.emailSending = emailSending;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class ReservationServiceImpl implements ReservationService{
 
 
         pdfGenerator.generateItinerary(reservation,file);
-//      emailUtil.sendItinerary(reservation.getPassenger().getEmail(), FILE_PATH);
+        emailSending.sendItinerary(reservation.getPassenger().getEmail(),reservation.getPassenger().getFirstName(),file);
 
         return reservation; //is service layer, will return to controller layer
     }

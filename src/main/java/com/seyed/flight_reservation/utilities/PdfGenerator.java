@@ -86,11 +86,12 @@ public class PdfGenerator {
         table1.addCell(reservation.getFlight().getOperatingAirlines());
         table1.addCell("Departure Date");
         table1.addCell(String.valueOf(reservation.getFlight().getDateOfDeparture()));
+        table1.addCell("Estimated Departure Time:");
+        table1.addCell(String.valueOf(reservation.getFlight().getEstimatedDepartureTime()));
         table1.addCell("Departure City");
         table1.addCell(reservation.getFlight().getDepartureCity());
         table1.addCell("Arrival City");
         table1.addCell(reservation.getFlight().getArrivalCity());
-
 
         return table1;
     }
