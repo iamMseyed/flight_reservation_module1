@@ -12,7 +12,11 @@
 </head>
 <body>
 <div style="text-align: center;margin: 5em;">
-   Ticket booked successfully! Your reservation id is ${reservationId}
+   Ticket booked successfully! Your reservation id is ${reservationId}.
+    <br>
+    Please check your registered email id for the confirmation pdf and keep that safe until you arrive at the destination.
+    <br>
+    Thank you for using our services.
 </div>
 </body>
 </html>

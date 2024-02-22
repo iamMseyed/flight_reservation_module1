@@ -3,9 +3,8 @@ package com.seyed.flight_reservation.entity;
 import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-@Data
 @EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 public class Passenger extends  AbstractEntity{
     private String firstName;

@@ -17,9 +17,6 @@ public class PdfGenerator {
     private static final Font smallBold = new Font(Font.FontFamily.HELVETICA, 12,
             Font.BOLD);
 
-    private static final Font thankYou = new Font(Font.FontFamily.TIMES_ROMAN, 10,
-            Font.ITALIC);
-
     public void generateItinerary(Reservation reservation, String filePath) {
         Document document = new Document();
         try {
@@ -34,7 +31,7 @@ public class PdfGenerator {
 
     }
 
-    private static PdfPTable generateTable(Reservation reservation, Document document) throws DocumentException {
+    private static void generateTable(Reservation reservation, Document document) throws DocumentException {
         Paragraph preface = new Paragraph();
 
         preface.add(new Paragraph("Flight Booking Details", catFont));
@@ -53,7 +50,6 @@ public class PdfGenerator {
         PdfPTable table1 = putFlightDetails(reservation); //add flight details
         document.add(table1);
 
-       return table;
     }
 
     private static PdfPTable putPassengerDetails(Reservation reservation) {

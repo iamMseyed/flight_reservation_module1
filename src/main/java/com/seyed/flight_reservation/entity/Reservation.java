@@ -5,8 +5,8 @@ import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
 @EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 public class Reservation extends AbstractEntity{
     private boolean checkedIn;
