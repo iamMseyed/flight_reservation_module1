@@ -1,4 +1,4 @@
-# Flight Reservation System
+# Flight Reservation System (Module - 1)
 
 This repository contains a Spring Boot-based flight reservation system that allows users to register, login, and book flights. Upon booking, a PDF ticket is generated and sent to the user's email address. The system utilizes a MySQL database for storing user and flight information.
 
