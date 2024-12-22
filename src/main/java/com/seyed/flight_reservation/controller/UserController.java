@@ -20,26 +20,26 @@ public class UserController {
     } //constructor based injection recommended instead of using @Autowired
 
     //when clicking on login url
-    @RequestMapping("/showLoginPage")
+    @RequestMapping("/show-login-page")
     public String showLoginPage(){
         return "login/login";
     }
 
     //when showReg url is hit
-    @RequestMapping("/showReg") //when home page is viewed, url is http://localhost:8080/flights/showReg // in app.prop file we set flights directory
+    @RequestMapping("/show-reg") //when home page is viewed, url is http://localhost:8080/flights/showReg // in app.prop file we set flights directory
     public String showRegistration(){
         return "login/showReg";
     }
 
     //when user registers
-    @RequestMapping("/saveReg")
+    @RequestMapping("/save-reg")
     public String saveReg(@ModelAttribute() User user, ModelMap modelMap){ //used ModelAttribute because registration from matches with entity class
         userRepository.save(user);
         modelMap.addAttribute("successMsg","You have successfully registered!");
         return "login/login";
     }
 
-    @RequestMapping("/verifyLogin")
+    @RequestMapping("/verify-login")
     public String verifyLogin(@RequestParam("emailId") String emailId, @RequestParam("password") String password, ModelMap modelMap){ //requestparam("should be same name as in jsp form field")
         User user = userRepository.findByEmail(emailId); //this will return the user on the basis of email id provided if available in the db
 //        System.out.println("Welcome: "+user.getEmail());
