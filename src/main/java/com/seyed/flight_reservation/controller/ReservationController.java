@@ -18,7 +18,7 @@ public class ReservationController {
     implemented class.
     */
 
-    @RequestMapping("/confirmReservation")
+    @RequestMapping("/confirm-reservation")
     public String confirmReservation(ReservationRequest reservationRequest, ModelMap modelMap){
         //we can use requestParam or DTO to transfer data from jsp to controller but request param will be lengthy
        Reservation reservationId = reservationService.bookFlight(reservationRequest);
