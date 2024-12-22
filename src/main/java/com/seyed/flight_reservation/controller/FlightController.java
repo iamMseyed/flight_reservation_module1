@@ -21,7 +21,7 @@ public class FlightController {
         this.flightRepository = flightRepository;
     }
 
-    @RequestMapping("/findFlights")
+    @RequestMapping("/find-flights")
     public String findFlights(
             @RequestParam("from") String from, //retrieving data from "form field" and initializing here to a new variable
             @RequestParam("to") String to,
@@ -33,7 +33,7 @@ public class FlightController {
         return "displayFlights";
     }
 
-    @RequestMapping("/showCompleteReservation")
+    @RequestMapping("/show-complete-reservation")
     public String showCompleteReservation(@RequestParam("flightId") Long flightId, ModelMap modelMap) {
         Optional<Flight> findById=flightRepository.findById(flightId);
         Flight flight;
